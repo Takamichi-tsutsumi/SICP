@@ -78,3 +78,95 @@
 ; test is first evaluted with 0 and (p). in test function, if first operator is equal to 0, then returns 0 without
 ; evaluatin the second argument.
 
+; Chapter 1.1.7
+; Newton's method to calculate square root
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(define (sqrt-iter guess x)
+  (printf "guess = ~v, x = ~v\n" guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x) x)))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
+
+(sqrt 3.0)
+
+; Exercise 1.6
+;(define (new-if predicate then-clause else-clause)
+;  (cond (predicate then-clause)
+;        (else else-clause)))
+;
+;(define (sqrt-iter-with-new-if guess x)
+;  (new-if (good-enough? guess x)
+;          guess
+;          (sqrt-iter-with-new-if (improve guess x) x)))
+;
+;(sqrt-iter-with-new-if 1.0 4.0)
+;
+; When using function, all the arguments passed to the function are evaluated first. (applicative order)
+; The third argument (sqrt-iter-with-new-if) are called recursively and cause infinite loop
+
+
+; Exercise 1.7
+; For small numbers, the square of guess soon lead to predefined tolerance.
+; For very large numbers, square of guess has less precise than 0.001. square of guess hit the same value
+; whose diff with x is greator than tolerance. 
+
+; (sqrt 10000000000000)
+; 3162277.6601683795
+(define (sqr x)
+  (* x x))
+(sqr 3162277.6601683795)
+
+(define (calc-error guess x)
+  (abs (- (square guess) x)))
+
+(define (good-enough-new? guess x)
+  (< (abs (- (calc-error guess x) (calc-error (improve guess x) x))) 0.00001))
+
+(define (sqrt-improved guess x)
+  (if (good-enough-new? guess x)
+      guess
+      (sqrt-improved (improve guess x) x)))
+
+(sqrt-improved 1.0 0.001)
+
+; Excercise 1.8
+(define (cube x)
+  (* x x x))
+
+(define (improve-cube guess x)
+  (/ (+ (/ x (sqr guess)) (* 2 guess)) 3))
+
+(define (calc-error-cube guess x)
+  (abs (- (cube guess) x)))
+
+(define (good-enough-cube? guess x)
+  ;(printf "error = ~v, next-error = ~v" (calc-error-cube guess x) (calc-error-cube (improve-cube guess x) x))
+  (< (abs (-
+           (calc-error-cube guess x)
+           (calc-error-cube (improve-cube guess x) x)))
+     0.0001))
+
+
+(define (cube-root-iter guess x)
+  ;(printf "guess = ~v, x = ~v" guess x)
+  ;(printf "good-enough-cube? = ~v" (good-enough-cube? guess x))
+  (if (good-enough-cube? guess x)
+      guess
+      (cube-root-iter (improve-cube guess x) x)))
+
+(define (cube-root x)
+  (cube-root-iter 1.0 x))
+
+(cube-root 27)
+(cube-root 285)
