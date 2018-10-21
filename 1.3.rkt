@@ -39,6 +39,39 @@
           (try next))))
   (try first-guess))
 
-(fixed-point-print (lambda (x) (/ (log 1000) (log x))) 5.0)
+; (fixed-point-print (lambda (x) (/ (log 1000) (log x))) 5.0)
 
 ; Exercise 1.37
+(define (cont-frac n d k)
+  (define (iter-frac i)
+    (display (d i))
+    (newline)
+    (if (= i k)
+        (/ (n i) (d i))
+        (/ (n i) (+ (d i) (iter-frac (+ i 1))))))
+  (iter-frac 1))
+
+; a. k is 11
+;(define phi (/ 1.0 (cont-frac (lambda (i) 1.0) (lambda (i) 1.0) 11)))
+;phi
+
+; b. write iterative process version of cont-frac
+
+(define (cont-frac-iterative n d k)
+  (define (iter-frac i acc)
+    (if (= i 1)
+        (/ (n i) (+ (d i) acc))
+        (iter-frac (- i 1)
+                   (/ (n i) (+ (d i) acc)))))
+  (iter-frac k 0))
+
+(/ 1 (cont-frac-iterative (lambda (i) 1.0) (lambda (i) 1.0) 11))
+
+; Exercise 1.38
+(+ 2 (cont-frac
+ (lambda (i) 1.0)
+ (lambda (i)
+   (if (= (remainder i 3) 2)
+       (* 2 (+ 1 (quotient i 3)))
+       1))
+ 10))
