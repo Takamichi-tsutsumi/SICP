@@ -123,3 +123,44 @@
 (second-point rect-a)
 (third-point rect-a)
 ;; skip perimeter and area
+
+; Exercise 2.4
+(define (_cons x y)
+  (lambda (m) (m x y)))
+
+(define (_car z)
+  (z (lambda (p q) p)))
+
+(define (_cdr z)
+  (z (lambda (p q) q)))
+
+(_car (_cons 1 2))
+(_cdr (_cons 1 2))
+
+; Exercise 2.5
+(define (times-div x y)
+  (define (iter a res)
+    (if (= (remainder a y) 0)
+        (iter (/ a y) (add1 res))
+        res))
+  (iter x 0))
+  
+(define (__cons x y)
+  (* (expt 2 x) (expt 3 y)))
+
+(define (__car z)
+  (times-div z 2))
+
+(define (__cdr z)
+  (times-div z 3))
+
+; Exercise 2.6
+(define zero (lambda (f) (lambda (x) x)))
+(define (add-1 n)
+  (lambda (f) (lambda (x) (f ((n f) x)))))
+
+(define one (lambda (f) (lambda (x) (f x))))
+(define two (lambda (f) (lambda (x) (f (f x)))))
+
+(define (add a b)
+  (lambda (f) (lambda (x) ((a f) ((b f) x)))))
