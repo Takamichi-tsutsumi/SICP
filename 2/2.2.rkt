@@ -41,3 +41,60 @@
       (append (reverse (cdr items)) (list (car items)))))
 
 (reverse odds)
+
+(define (map proc items)
+  (if (null? items)
+      null
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
+(map abs (list -10 2.5 -11.6 17))
+
+;; 2.2.2 Hierarchical Structures
+(define x (cons (list 1 2) (list 3 4)))
+(list x x)
+
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
+
+(pair? (list 1 2))
+(pair? (cons 1 2))
+(null? '())
+(null? (cdr '(1)))
+
+(count-leaves x)
+(count-leaves (list x x))
+(count-leaves (cons x x))
+
+(list 1 (list 2 (list 3 4)))
+
+;; ex 2.26
+(define a (list 1 2 3))
+(define b (list 4 5 6))
+
+(append a b)
+(cons a b)
+(list a b)
+
+;; ex 2.27
+(define x28 (list (list 1 2) (list 3 4)))
+x28
+(reverse x28)
+
+(define (deep-reverse l)
+  (cond ((null? l) null)
+        ((pair? (car l))
+         (append
+                           (deep-reverse (cdr l))
+
+          (list (deep-reverse (car l)))
+                 ))
+        (else
+         (append (list (car l))
+                 (deep-reverse (cdr l))))))
+
+      
+(deep-reverse x28)
