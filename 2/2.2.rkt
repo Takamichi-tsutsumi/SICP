@@ -88,13 +88,11 @@ x28
   (cond ((null? l) null)
         ((pair? (car l))
          (append
-                           (deep-reverse (cdr l))
-
-          (list (deep-reverse (car l)))
-                 ))
+          (deep-reverse (cdr l))
+          (list (deep-reverse (car l)))))
         (else
-         (append (list (car l))
-                 (deep-reverse (cdr l))))))
+         (append
+          (deep-reverse (cdr l))
+          (list (car l))))))
 
-      
 (deep-reverse x28)
