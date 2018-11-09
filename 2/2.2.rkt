@@ -96,3 +96,17 @@ x28
           (list (car l))))))
 
 (deep-reverse x28)
+
+; ex 2.28
+; Procedure to take a tree and returns a list whose elements are all the leaves of the tree
+(define (fringe tree)
+  (cond ((null? tree) tree)
+        ((pair? (car tree))
+         (append (fringe (car tree))
+                 (fringe (cdr tree))))
+        (else
+         (append (list (car tree))
+                 (fringe (cdr tree))))))
+
+(fringe x28)
+(fringe (list x x))
