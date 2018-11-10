@@ -110,3 +110,43 @@ x28
 
 (fringe x28)
 (fringe (list x x))
+
+; ex 2.29
+; TODO
+(define (make-mobile left right)
+  (list left right))
+
+(define (make-branch length structure)
+  (list length structure))
+
+; a.
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (car (cdr mobile)))
+
+(define (branch-length branch)
+  (car branch))
+
+(define (branch-structure branch)
+  (car (cdr branch)))
+
+; b.
+(define (total-weight mobile)
+  (if (not (pair? (branch-structure mobile)))
+      (branch-structure mobile)
+      (+ (total-weight (left-branch mobile))
+         (total-weight (right-branch mobile)))))
+
+(define mobile (make-mobile (make-branch 1 4) (make-branch 2 8)))
+
+
+; c.
+(define (is-balanced mobile)
+  (= (* (total-weight (left-branch mobile))
+        (branch-length (right-branch mobile)))
+     (* (total-weight (right-branch mobile))
+        (branch-length (left-branch mobile)))))
+
+(is-balanced mobile)
