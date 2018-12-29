@@ -14,8 +14,9 @@
           (begin (set! ms (+ ms 1))
                  (procedure x))))))
 
-;; Ex3.3
+;; Ex3.3 Ex3.4
 (define (make-account balance secret-password)
+
   (define (withdraw amount)
     (if (>= balance amount)
         (begin (set! balance (- balance amount))
@@ -24,10 +25,15 @@
   (define (deposit amount)
     (set! balance (+ balance amount))
     balance)
-  (define (dispatch p m)
-    (if (eq? p secret-password)
-        (cond ((eq? m 'withdraw) withdraw)
-              ((eq? m 'deposit) deposit)
-              (else (error "Unknown request: MAKE-ACCOUNT" m)))
-        (error "Incorrect password")))
-  dispatch)
+  (let ((fail-count 0))
+    (define (dispatch p m)
+      (if (eq? p secret-password)
+          (begin (set! fail-count 0)
+                 (cond ((eq? m 'withdraw) withdraw)
+                       ((eq? m 'deposit) deposit)
+                       (else (error "Unknown request: MAKE-ACCOUNT" m))))
+          (begin (set! fail-count (+ fail-count 1))
+                 (if (>= fail-count 3)
+                     (error "call the police")
+                     (error "Incorrect password")))))
+  dispatch))
